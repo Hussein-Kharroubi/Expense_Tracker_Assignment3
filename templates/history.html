@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>History</title>
+</head>
+
+    <form action="{% url 'dashboard' %}" method="get">
+        <button type="submit">Return to Dashboard</button>
+    </form>
+<body>
+    <h1>History</h1>
+
+<table border="1">
+	<tr>
+		<th>Date</th>
+		<th>Category</th>
+		<th>Store</th>
+		<th>Amount</th>
+		<th>Description</th>
+	</tr>
+	{% for e in expenses %}
+	<tr>
+		<td>{{ e.date }}</td>
+		<td>{{ e.get_category_display }}</td>
+		<td>{{ e.store }}</td>
+		<td>{{ e.amount }}</td>
+		<td>{{ e.description }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+</body>
+</html>

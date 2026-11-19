@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add expense</title>
+</head>
+<body>
+
+<h2>Add expense</h2>
+
+{% for message in messages %}
+<p>{{ message }}</p>
+{% endfor %}
+
+<form method="post">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<button type="submit">Add</button>
+</form>
+
+<form action="{% url 'dashboard' %}"><button type="submit">Return to Dashboard</button></form>
+
+</body>
+</html>

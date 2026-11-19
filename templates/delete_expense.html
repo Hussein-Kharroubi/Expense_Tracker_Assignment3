@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Delete expense</title>
+</head>
+<body>
+
+<h2>Delete this expense?</h2>
+<p>{{ expense.date }} - {{ expense.store }} - {{ expense.amount }}</p>
+
+<form method="post">
+	{% csrf_token %}
+	<button type="submit">Yes, delete</button>
+</form>
+
+<p><a href="{% url 'delete_list' %}">Back to list</a></p>
+
+<form action="{% url 'dashboard' %}"><button type="submit">Return to Dashboard</button></form>
+
+</body>
+</html>

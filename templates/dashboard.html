@@ -1,0 +1,132 @@
+<head>
+    <title>Dashboard</title>
+	<style>
+		body {
+			font-family: Georgia, 'Times New Roman', serif;
+			color: #222;
+			max-width: 1000px;
+			margin: 2rem auto;
+			padding: 0 1.5rem;
+		}
+		h1 { color: #222; margin-bottom: 0.25rem; }
+		h3 { color: #222; margin: 1.25rem 0 0.4rem; }
+
+		.layout { display: grid; grid-template-columns: 320px 1fr; gap: 3rem; margin-top: 1.5rem; }
+
+		.buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; align-content: start; }
+		.buttons form { margin: 0; }
+		.buttons button {
+			width: 100%;
+			height: 48px;
+			font: inherit;
+			font-size: 0.95rem;
+			background: #f4f4f4;
+			border: 1px solid #222;
+			color: #222;
+			cursor: pointer;
+		}
+		.buttons button:hover { background: #222; color: #fff; }
+
+		.summary h3:first-child { margin-top: 0; }
+		table { border-collapse: collapse; }
+		th, td { border: 1px solid #ccc; padding: 0.4rem 0.8rem; text-align: left; }
+		th { background: #f4f4f4; }
+	</style>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <p>Welcome, {{ user.username }}</p>
+
+    <div class="layout">
+		<div class="buttons">
+			<form action="{% url 'add_expense' %}">
+				<button type="submit">Add Expense</button>
+			</form>
+
+			<form action="{% url 'edit_list' %}">
+				<button type="submit">Edit Expense</button>
+			</form>
+
+			<form action="{% url 'delete_list' %}">
+				<button type="submit">Delete Expense</button>
+			</form>
+
+			<form action="{% url 'search_expenses' %}">
+				<button type="submit">Search Expenses</button>
+			</form>
+
+			<form action="{% url 'profile' %}" method="get">
+				<button type="submit">Profile</button>
+			</form>
+
+			<form action="{% url 'history' %}" method="get">
+				<button type="submit">History</button>
+			</form>
+
+			<form method="post" action="{% url 'logout' %}">
+				{% csrf_token %}
+				<button type="submit">Log out</button>
+			</form>
+		</div>
+
+		<div class="summary">
+			<h3>Total spending this month ({{ today|date:"F Y" }})</h3>
+			<p>{{ total_this_month|floatformat:2 }}</p>
+
+			<h3>Spending by category (all time)</h3>
+			<table border="1">
+				<tr>
+					<th>Category</th>
+					<th>Amount</th>
+				</tr>
+				{% for c in spending_by_category %}
+				<tr>
+					<td>{{ c.category }}</td>
+					<td>{{ c.total|floatformat:2 }}</td>
+				</tr>
+				{% empty %}
+				<tr><td colspan="2">No expenses yet.</td></tr>
+				{% endfor %}
+			</table>
+
+			<h3>Recent expenses (last 14 days)</h3>
+			<table border="1">
+				<tr>
+					<th>Date</th>
+					<th>Category</th>
+					<th>Store</th>
+					<th>Amount</th>
+					<th>Description</th>
+				</tr>
+				{% for e in recent_expenses %}
+				<tr>
+					<td>{{ e.date }}</td>
+					<td>{{ e.get_category_display }}</td>
+					<td>{{ e.store }}</td>
+					<td>{{ e.amount }}</td>
+					<td>{{ e.description }}</td>
+				</tr>
+				{% empty %}
+				<tr><td colspan="5">No expenses in the last 14 days.</td></tr>
+				{% endfor %}
+			</table>
+
+			<h3>Monthly summary</h3>
+			<table border="1">
+				<tr>
+					<th>Month</th>
+					<th>Amount</th>
+				</tr>
+				{% for m in monthly_summary %}
+				<tr>
+					<td>{{ m.month|date:"F Y" }}</td>
+					<td>{{ m.total|floatformat:2 }}</td>
+				</tr>
+				{% empty %}
+				<tr><td colspan="2">No expenses yet.</td></tr>
+				{% endfor %}
+			</table>
+
+		</div>
+</body>
+</html>

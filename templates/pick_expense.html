@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ title }}</title>
+</head>
+<body>
+<form action="{% url 'dashboard' %}"><button type="submit">Return to Dashboard</button></form>
+
+<h2>{{ title }}</h2>
+
+{% for message in messages %}
+<p>{{ message }}</p>
+{% endfor %}
+
+<form method="get">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search store or description">
+    <select name="category">
+        <option value="">All categories</option>
+        {% for value, label in categories %}
+            <option value="{{ value }}" {% if value == category %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Filter</button>
+    <a href="{{ request.path }}">Clear</a>
+</form>
+
+
+<table border="1">
+	<tr>
+		<th>ID</th>
+		<th>Date</th>
+		<th>Category</th>
+		<th>Store</th>
+		<th>Amount</th>
+		<th>Description</th>
+		<th></th>
+	</tr>
+	{% for e in expenses %}
+	<tr>
+		<td>{{ e.id }}</td>
+		<td>{{ e.date }}</td>
+		<td>{{ e.get_category_display }}</td>
+		<td>{{ e.store }}</td>
+		<td>{{ e.amount }}</td>
+		<td>{{ e.description }}</td>
+		<td><a href="{% url action e.id %}">{{ label }}</a></td>
+	</tr>
+	{% endfor %}
+</table>
+
+
+</body>
+</html>
